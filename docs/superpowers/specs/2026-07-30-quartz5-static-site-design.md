@@ -22,6 +22,8 @@
 - <https://quartz.jzhao.xyz/plugins/basespage>
 - <https://quartz.jzhao.xyz/hosting>
 - <https://raw.githubusercontent.com/jackyzha0/quartz/v5/quartz/i18n/index.ts>
+- <https://github.com/Vinzent03/obsidian-git>
+- <https://publish.obsidian.md/git-doc/Authentication>
 
 ## 公開範圍
 
@@ -32,12 +34,13 @@
 
 ## 專案結構
 
-現有 Vault 保持在倉庫根目錄，不移動筆記。Quartz 5 專案放入 Obsidian 不顯示的隱藏資料夾：
+現有 Vault 保持在倉庫根目錄；景點筆記位於 `景點/`。Quartz 5 專案放入 Obsidian 不顯示的隱藏資料夾：
 
 ```text
 Vault 根目錄/
 ├── .obsidian/                 # 本機設定，不進 Git、不發布
 ├── .quartz-site/              # Quartz 5 專案原始碼
+│   ├── .nvmrc                 # 固定 Node.js 22
 │   ├── content/               # 構建前產生，不進 Git
 │   ├── quartz.config.yaml
 │   ├── quartz.lock.json
@@ -47,8 +50,9 @@ Vault 根目錄/
 ├── scripts/
 │   └── prepare-content.sh     # 建立 .quartz-site/content
 ├── docs/superpowers/          # 規格與計畫，不發布
+├── 景點/                      # Base 的資料來源
 ├── 總彙.base
-└── *.md、區域/、捷運站/、書店/
+└── 區域/、捷運站/、書店/
 ```
 
 不使用 `content` symlink：本機 symlink 指向 Vault 根目錄，推送到 Cloudflare 後可能成為失效或遞迴連結。構建前以可重現腳本建立實體 `content/` 暫存副本。
@@ -56,15 +60,17 @@ Vault 根目錄/
 ## 資料流與部署
 
 1. 使用者照常在目前 Vault 根目錄編輯筆記。
-2. `scripts/prepare-content.sh` 清空並重建 `.quartz-site/content`，只複製允許公開的 `.md`、`.base` 和內容附件，保留相對路徑。
+2. `scripts/prepare-content.sh` 清空並重建 `.quartz-site/content`，複製 `景點/`、`區域/`、`捷運站/`、`書店/`、`總彙.base` 及允許公開的內容附件，保留相對路徑。
 3. 腳本新增 `.quartz-site/content/index.md` 作為首頁；首頁標記 `unlisted: true`，只負責將訪客導向／嵌入 `總彙.base`，因此不會被 BasesPage 收進資料表，也不在 Vault 根目錄新增會干擾篩選的筆記。
 4. 在 `.quartz-site` 執行 `npm ci`、`npx quartz plugin install` 及 `npx quartz build`。
 5. Cloudflare Pages 發布 `.quartz-site/public`。
 6. 每次推送 GitHub 後，Cloudflare 重新執行同一流程。
+7. 日常發布由 Obsidian Git 的 `Commit-and-sync` 完成；它提交 Vault 變更、pull、push 至 `origin/main`，再由 Cloudflare 接手構建。
 
 ## Quartz 配置
 
 - 使用 Quartz 5 `obsidian` template，不使用 Quartz 4 的 TypeScript 配置格式。
+- 本機使用 nvm 0.39.0 與已安裝的 Node.js 22.22.3；`.nvmrc` 寫入 `22`，所有本機 Quartz 命令前先執行 `nvm use`。
 - `configuration.pageTitle` 設為「臺灣旅行」。
 - `configuration.locale` 設為 Quartz 5 `TRANSLATIONS` registry 已明確列出的 `zh-TW`。
 - `configuration.baseUrl` 初始設為 `taiwan-travel.pages.dev`，不含 `https://` 與前後斜線；若 Cloudflare 專案實際使用其他名稱，只修改此一設定。
@@ -79,18 +85,20 @@ Vault 根目錄/
 
 - `總彙.base` 使用其第一個 `table` view。
 - 保留欄位順序：`file.name`、`區域`、`捷運站`、`開放時間`、`附近景點`、`tags`。
-- 保留 `file.folder == "/"` 與 `file.path != "總彙.base"` 篩選。
-- 本機構建時實際驗證 Quartz 5 expression engine 對根目錄 `file.folder` 的值；只有確認不相容後，才對 Base 作最小且同時相容於 Obsidian 的調整。
+- 保留已在 Obsidian 中生效的 `file.folder == "景點"` 篩選。
+- 以 Obsidian CLI 查詢結果與 Quartz 5 BasesPage 輸出交叉驗證兩端均只列出 `景點/` 筆記；只有確認 expression engine 不相容後，才對 Base 作最小且同時相容於 Obsidian 的調整。
 - Base 是構建時生成的靜態 HTML；訪客可使用渲染器提供的排序與 tab 互動，但不能修改或寫回 Vault。
 
 ## 安全與版本管理
 
 - GitHub 倉庫使用私有可見性；只有 Cloudflare 的生成網站公開。
+- Git remote 固定為 `git@github.com:jasonlam-swatow/taiwan-travel.git`，預設分支及 Cloudflare production branch 均為 `main`。
 - `.obsidian` 不進 Git，避免上傳工作區、同步和插件配置。
 - `.quartz-site/content` 與 `.quartz-site/public` 不進 Git，避免重複資料和意外發布管理文件。
 - Quartz 本體由 `package-lock.json` 鎖定；社群插件由 `quartz.lock.json` 鎖定。CI 使用 `npm ci` 與 `npx quartz plugin install`，不使用 `--latest`。
 - 構建腳本採 allowlist，只接受公開內容類型與明確內容路徑；未知的隱藏資料夾、部署檔案和管理文件預設不複製。
 - 任一步內容準備、依賴安裝、插件安裝或構建失敗時立即停止，不發布不完整輸出。
+- Obsidian Git 只操作既有 repository，不執行 Initialize 或 Clone；首次 upstream 已設定為 `origin/main`。自動 commit-and-sync 在網站驗證完成後才啟用。
 
 ## 本機驗證
 
