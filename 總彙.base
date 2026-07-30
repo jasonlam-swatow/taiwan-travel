@@ -1,0 +1,19 @@
+properties:
+  file.name:
+    displayName: 景點
+views:
+  - type: table
+    name: 表格
+    filters:
+      and:
+        - file.folder == "景點"
+    order:
+      - file.name
+      - 區域
+      - 捷運站
+      - 開放時間
+      - 附近景點
+      - tags
+    sort: []
+    columnSize:
+      note.捷運站: 146

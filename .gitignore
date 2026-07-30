@@ -1,0 +1,16 @@
+# macOS and editor state
+.DS_Store
+.trash/
+
+# Obsidian application, workspace, plugin, and sync settings
+.obsidian/
+
+# Quartz generated and installed files
+.quartz-site/content/
+.quartz-site/public/
+.quartz-site/node_modules/
+
+# Local build artifacts
+node_modules/
+public/
+*.log
