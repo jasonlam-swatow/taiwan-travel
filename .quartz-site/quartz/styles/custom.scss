@@ -1,3 +1,18 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// Give the Base homepage the unused right-sidebar space on desktop.
+@media all and ($desktop) {
+  body[data-slug="index"] .page > #quartz-body {
+    grid-template-columns: $sidePanelWidth minmax(0, 1fr);
+    grid-template-areas:
+      "grid-sidebar-left grid-header"
+      "grid-sidebar-left grid-center"
+      "grid-sidebar-left grid-footer";
+
+    & .sidebar.right {
+      display: none;
+    }
+  }
+}

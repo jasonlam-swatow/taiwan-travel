@@ -163,6 +163,7 @@ plugins:
     layout:
       position: right
       priority: 10
+      condition: not-index
   - source: "@quartz-community/search"
     enabled: true
     layout:
@@ -176,16 +177,19 @@ plugins:
     layout:
       position: right
       priority: 50
+      condition: not-index
   - source: "@quartz-community/article-title"
     enabled: true
     layout:
       position: beforeBody
       priority: 10
+      condition: not-index
   - source: "@quartz-community/content-meta"
     enabled: true
     layout:
       position: beforeBody
       priority: 20
+      condition: not-index
   - source: "@quartz-community/tag-list"
     enabled: false
     layout:
@@ -226,8 +230,7 @@ plugins:
     enabled: true
     options:
       links:
-        GitHub: https://github.com/jackyzha0/quartz
-        Discord Community: https://discord.gg/cRFFHYye7t
+        GitHub: https://github.com/jasonlam-swatow/taiwan-travel
     layout:
       position: footer
       priority: 50
@@ -255,7 +258,9 @@ plugins:
         - description
         - tags
         - aliases
-      excludedProperties: []
+      excludedProperties:
+        - title
+        - modified
       hidePropertiesView: false
       delimiters: ---
       language: yaml
@@ -264,8 +269,9 @@ plugins:
       position: beforeBody
       priority: 15
       display: all
+      condition: not-index
   - source: "@quartz-community/obsidian-plugin-excalidraw"
-    enabled: true
+    enabled: false
     options:
       enableInteraction: true
       darkMode: auto
