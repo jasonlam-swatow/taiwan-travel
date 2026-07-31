@@ -18,7 +18,7 @@ test ! -e "$content_root/docs"
 test ! -e "$content_root/scripts"
 test ! -e "$content_root/.quartz-site"
 grep -q '^unlisted: true$' "$content_root/index.md"
-grep -q '^# 臺灣旅行$' "$content_root/index.md"
+grep -q '^# 🇹🇼 臺灣旅行$' "$content_root/index.md"
 grep -q '!\[\[總彙.base\]\]' "$content_root/index.md"
 
 expected_notes="$(find "$repo_root/景點" "$repo_root/區域" "$repo_root/捷運站" "$repo_root/書店" -type f -name '*.md' | wc -l | tr -d ' ')"

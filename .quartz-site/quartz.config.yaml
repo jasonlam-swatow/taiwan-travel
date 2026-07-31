@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: 臺灣旅行
+  pageTitle: "🇹🇼 臺灣旅行"
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true

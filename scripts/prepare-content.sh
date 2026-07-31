@@ -20,11 +20,11 @@ cp "$repo_root/總彙.base" "$content_root/總彙.base"
 
 cat > "$content_root/index.md" <<'EOF'
 ---
-title: 臺灣旅行
+title: "🇹🇼 臺灣旅行"
 unlisted: true
 ---
 
-# 臺灣旅行
+# 🇹🇼 臺灣旅行
 
 ![[總彙.base]]
 EOF
