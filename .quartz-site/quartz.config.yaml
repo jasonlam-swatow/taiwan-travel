@@ -109,7 +109,7 @@ plugins:
   - source: "@quartz-themes/core"
     enabled: true
     options:
-      theme: default
+      theme: catppuccin
       mode: both
   - source: "@quartz-community/remove-draft"
     enabled: true
