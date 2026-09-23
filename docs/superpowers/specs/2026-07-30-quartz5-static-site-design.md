@@ -51,8 +51,8 @@ Vault 根目錄/
 │   └── prepare-content.sh     # 建立 .quartz-site/content
 ├── docs/superpowers/          # 規格與計畫，不發布
 ├── 景點/                      # Base 的資料來源
-├── 總彙.base
-└── 區域/、捷運站/、書店/
+├── 總彙.base、2026-10 臺北行程.base
+└── 區域/、捷運站/、書店/、行程/
 ```
 
 不使用 `content` symlink：本機 symlink 指向 Vault 根目錄，推送到 Cloudflare 後可能成為失效或遞迴連結。構建前以可重現腳本建立實體 `content/` 暫存副本。
@@ -60,8 +60,8 @@ Vault 根目錄/
 ## 資料流與部署
 
 1. 使用者照常在目前 Vault 根目錄編輯筆記。
-2. `scripts/prepare-content.sh` 清空並重建 `.quartz-site/content`，複製 `景點/`、`區域/`、`捷運站/`、`書店/`、`總彙.base` 及允許公開的內容附件，保留相對路徑。
-3. 腳本新增 `.quartz-site/content/index.md` 作為首頁；首頁標記 `unlisted: true`，只負責將訪客導向／嵌入 `總彙.base`，因此不會被 BasesPage 收進資料表，也不在 Vault 根目錄新增會干擾篩選的筆記。
+2. `scripts/prepare-content.sh` 清空並重建 `.quartz-site/content`，複製 `景點/`、`區域/`、`捷運站/`、`書店/`、`行程/`、`總彙.base`、`2026-10 臺北行程.base` 及允許公開的內容附件，保留相對路徑。
+3. 腳本新增 `.quartz-site/content/index.md` 作為首頁；首頁標記 `unlisted: true`，嵌入 `總彙.base` 和 `2026-10 臺北行程.base`，因此不會被 BasesPage 收進資料表，也不在 Vault 根目錄新增會干擾篩選的筆記。
 4. 在 `.quartz-site` 執行 `npm ci`、`npx quartz plugin install` 及 `npx quartz build`。
 5. Cloudflare Pages 發布 `.quartz-site/public`。
 6. 每次推送 GitHub 後，Cloudflare 重新執行同一流程。
@@ -104,7 +104,7 @@ Vault 根目錄/
 
 - 使用 Node.js 22 或以上執行完整安裝與構建。
 - 執行 `npx quartz build --serve`，通過 HTTP 預覽而非直接開啟 HTML。
-- 驗證首頁、`總彙.base`、至少一篇 `景點/` 筆記、一篇區域筆記、一篇捷運站筆記和一篇書店筆記。
+- 驗證首頁、兩個 `.base`、至少一篇 `景點/` 筆記、一篇區域筆記、一篇捷運站筆記、一篇書店筆記和一篇行程筆記。
 - 驗證中文檔名、全形括號、en dash 檔名和 wikilinks 的實際網址。
 - 驗證搜尋、Explorer、Graph、Backlinks、NoteProperties、深淺色切換與 Base 表格。
 - 在桌面及手機寬度目視驗證；Base 表格必須可操作，不得造成整頁不可用的橫向溢出。
@@ -112,7 +112,7 @@ Vault 根目錄/
 ## 驗收標準
 
 - `npm ci`、插件安裝及 Quartz build 均退出碼為 0。
-- `public` 中存在首頁、Base 頁、搜尋索引及必要靜態資源。
+- `public` 中存在首頁、兩個 Base 頁、行程總覽及必要靜態資源。
 - Base 表格列出預期的 `景點/` 筆記，指定六個欄位可見，內部連結可點擊。
 - 所抽查的中文 wikilinks 均跳轉到正確 HTML 頁面，沒有 `.md` 原始路徑或本機絕對路徑。
 - `.obsidian`、`.git`、Quartz 原始碼、`scripts`、README、規格與計畫文件不出現在公開內容或搜尋索引。

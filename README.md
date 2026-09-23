@@ -1,6 +1,6 @@
 # 臺灣旅行
 
-這個 Obsidian Vault 使用 [Quartz 5](https://quartz.jzhao.xyz/) 產生唯讀靜態網站。網站內容包括 `景點/`、`區域/`、`捷運站/`、`書店/` 與 `總彙.base`；`.obsidian/`、開發文件和建置工具不會發布。
+這個 Obsidian Vault 使用 [Quartz 5](https://quartz.jzhao.xyz/) 產生唯讀靜態網站。網站內容包括 `景點/`、`區域/`、`捷運站/`、`書店/`、`行程/`、`總彙.base` 與 `2026-10 臺北行程.base`；`.obsidian/`、開發文件和建置工具不會發布。
 
 ## 本機預覽
 

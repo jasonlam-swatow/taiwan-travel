@@ -2,8 +2,9 @@ filters:
   and:
     - file.inFolder("行程/2026-10 臺北")
     - file.ext == "md"
-    - 日期 >= date("2026-10-01")
-    - 日期 <= date("2026-10-10")
+    - note["日期"] != null
+    - date(note["日期"]) >= date("2026-10-01")
+    - date(note["日期"]) <= date("2026-10-10")
 properties:
   file.name:
     displayName: 每日行程
