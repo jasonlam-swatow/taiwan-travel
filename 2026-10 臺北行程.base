@@ -1,0 +1,39 @@
+filters:
+  and:
+    - file.inFolder("行程/2026-10 臺北")
+    - file.ext == "md"
+    - 日期 >= date("2026-10-01")
+    - 日期 <= date("2026-10-10")
+properties:
+  file.name:
+    displayName: 每日行程
+  日期:
+    displayName: 日期
+  星期:
+    displayName: 星期
+  主題:
+    displayName: 主題
+  景點:
+    displayName: 景點
+  區域:
+    displayName: 區域
+  狀態:
+    displayName: 狀態
+views:
+  - type: table
+    name: 按日期
+    groupBy:
+      property: 日期
+      direction: ASC
+    order:
+      - file.name
+      - 星期
+      - 景點
+      - 區域
+      - 狀態
+    sort:
+      - property: file.name
+        direction: DESC
+    columnSize:
+      file.name: 161
+      note.景點: 364
