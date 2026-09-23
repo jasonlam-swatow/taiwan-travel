@@ -33,8 +33,8 @@ views:
       - 區域
       - 狀態
     sort:
-      - property: file.name
-        direction: DESC
+      - property: 日期
+        direction: ASC
     columnSize:
       file.name: 161
       note.景點: 364
